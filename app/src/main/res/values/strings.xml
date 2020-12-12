@@ -1,0 +1,15 @@
+<resources>
+
+    <!--Application name-->
+    <string name="app_name">GithubSearch</string>
+
+    <!--Search suggestion-->
+    <string name="search_suggestion">Click on the search icon above to search for a project on Github.</string>
+
+    <!--Connectivity issues message-->
+    <string name="connectivity_issues">Error while loading results :(. Check internet connectivity and try again!</string>
+
+    <!--Invalid search query message-->
+    <string name="invalid_query">No matching name found. Please try searching again!</string>
+
+</resources>
