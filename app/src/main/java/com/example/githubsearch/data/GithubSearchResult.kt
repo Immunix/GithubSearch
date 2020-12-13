@@ -1,8 +1,9 @@
-package com.example.githubsearch.dataModel
+package com.example.githubsearch.data
 
 // Matching the Github search data model.
 
 data class GithubSearchResult(
+    val id: String,
     val full_name: String,
     val owner: GithubAvatar,
     val description: String?
