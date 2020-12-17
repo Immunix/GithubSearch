@@ -23,6 +23,6 @@ class SearchViewModel @ViewModelInject constructor(
     }
 
     companion object {
-        private const val DEFAULT_QUERY = "linux"
+        private const val DEFAULT_QUERY = ""
     }
 }

@@ -12,4 +12,10 @@
     <!--Invalid search query message-->
     <string name="invalid_query">No matching name found. Please try searching again!</string>
 
+    <!--Retry button text-->
+    <string name="retry">Retry</string>
+
+    <!--Search icon text-->
+    <string name="search">Search</string>
+
 </resources>

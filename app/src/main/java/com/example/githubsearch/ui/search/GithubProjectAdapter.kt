@@ -21,8 +21,8 @@ class GithubProjectAdapter :
                 Glide.with(itemView)
                     .load(project.owner.avatar_url)
                     .centerCrop()
-                    .error(R.drawable.ic_error)
                     .override(240, 240)
+                    .error(R.drawable.ic_error)
                     .into(userAvatar)
 
                 projectFullName.text = project.full_name
