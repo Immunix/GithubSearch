@@ -7,6 +7,19 @@
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.githubsearch.ui.search.SearchFragment"
-        android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        android:label="Project Search"
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_searchFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.example.githubsearch.ui.details.DetailsFragment"
+        android:label="Project Details"
+        tools:layout="@layout/fragment_details">
+        <argument
+            android:name="project"
+            app:argType="com.example.githubsearch.data.GithubSearchResult" />
+    </fragment>
 </navigation>

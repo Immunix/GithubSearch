@@ -10,11 +10,23 @@ import com.example.githubsearch.R
 import com.example.githubsearch.data.GithubSearchResult
 import com.example.githubsearch.databinding.SearchCellBinding
 
-class GithubProjectAdapter :
+class GithubProjectAdapter(private val listener: OnItemClickListener) :
     PagingDataAdapter<GithubSearchResult, GithubProjectAdapter.ProjectViewHolder>(PROJECT_COMPARATOR) {
 
-    class ProjectViewHolder(private val binding: SearchCellBinding) :
+    inner class ProjectViewHolder(private val binding: SearchCellBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.root.setOnClickListener {
+                val position = bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val item = getItem(position)
+                    if (item != null) {
+                        listener.onItemClick(item)
+                    }
+                }
+            }
+        }
 
         fun bind(project: GithubSearchResult) {
             binding.apply {
@@ -29,6 +41,10 @@ class GithubProjectAdapter :
                 projectDescription.text = project.description
             }
         }
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(project: GithubSearchResult)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProjectViewHolder {

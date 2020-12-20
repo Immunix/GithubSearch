@@ -1,18 +1,17 @@
 package com.example.githubsearch.ui.search
 
+import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.switchMap
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.paging.cachedIn
 import com.example.githubsearch.data.GithubRepository
 
 class SearchViewModel @ViewModelInject constructor(
-    private val repository: GithubRepository
+    private val repository: GithubRepository,
+    @Assisted state: SavedStateHandle
 ) : ViewModel() {
 
-    private val currentQuery = MutableLiveData(DEFAULT_QUERY)
+    private val currentQuery = state.getLiveData(CURRENT_QUERY, DEFAULT_QUERY)
 
     val projects = currentQuery.switchMap { queryString ->
         repository.getSearchResults(queryString).cachedIn(viewModelScope)
@@ -23,6 +22,7 @@ class SearchViewModel @ViewModelInject constructor(
     }
 
     companion object {
+        private const val CURRENT_QUERY = "current_query"
         private const val DEFAULT_QUERY = ""
     }
 }

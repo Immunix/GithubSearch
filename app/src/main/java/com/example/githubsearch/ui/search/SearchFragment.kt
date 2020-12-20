@@ -5,30 +5,35 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isEmpty
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import com.example.githubsearch.R
+import com.example.githubsearch.data.GithubSearchResult
 import com.example.githubsearch.databinding.FragmentSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SearchFragment : Fragment(R.layout.fragment_search) {
+class SearchFragment : Fragment(R.layout.fragment_search), GithubProjectAdapter.OnItemClickListener {
+
+    companion object {
+        private var isSomethingSearched = false
+    }
 
     private val viewModel by viewModels<SearchViewModel>()
 
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
 
-    private var isSomethingSearched = false
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         _binding = FragmentSearchBinding.bind(view)
 
-        val adapter = GithubProjectAdapter()
+        val adapter = GithubProjectAdapter(this)
 
         binding.apply {
             recyclerSearch.setHasFixedSize(true)
@@ -49,15 +54,16 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 recyclerSearch.isVisible = loadState.source.refresh is LoadState.NotLoading
 
                 if (loadState.source.refresh is LoadState.NotLoading &&
-                        loadState.append.endOfPaginationReached &&
-                        adapter.itemCount < 1) {
+                    loadState.append.endOfPaginationReached &&
+                    adapter.itemCount < 1
+                ) {
                     recyclerSearch.isVisible = false
                     infoTextView.isVisible = true
                     infoTextView.text = resources.getString(R.string.invalid_query)
                 } else if (loadState.source.refresh is LoadState.Error && isSomethingSearched) {
                     infoTextView.isVisible = true
                     infoTextView.text = resources.getString(R.string.connectivity_issues)
-                } else if (!isSomethingSearched) {
+                } else if (recyclerSearch.isEmpty() && !isSomethingSearched) {
                     infoTextView.isVisible = true
                     infoTextView.text = resources.getString(R.string.search_suggestion)
                 } else {
@@ -67,6 +73,11 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
 
         setHasOptionsMenu(true)
+    }
+
+    override fun onItemClick(project: GithubSearchResult) {
+        val action = SearchFragmentDirections.actionSearchFragmentToDetailsFragment(project)
+        findNavController().navigate(action)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
