@@ -6,6 +6,7 @@ import android.view.MenuInflater
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isEmpty
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -17,7 +18,8 @@ import com.example.githubsearch.databinding.FragmentSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SearchFragment : Fragment(R.layout.fragment_search), GithubProjectAdapter.OnItemClickListener {
+class SearchFragment : Fragment(R.layout.fragment_search),
+    GithubProjectAdapter.OnItemClickListener {
 
     companion object {
         private var isSomethingSearched = false
@@ -57,17 +59,17 @@ class SearchFragment : Fragment(R.layout.fragment_search), GithubProjectAdapter.
                     loadState.append.endOfPaginationReached &&
                     adapter.itemCount < 1
                 ) {
-                    recyclerSearch.isVisible = false
-                    infoTextView.isVisible = true
-                    infoTextView.text = resources.getString(R.string.invalid_query)
+                    recyclerSearch.gone()
+                    infoTextView.visible()
+                    infoTextView.text = getString(R.string.invalid_query)
                 } else if (loadState.source.refresh is LoadState.Error && isSomethingSearched) {
-                    infoTextView.isVisible = true
-                    infoTextView.text = resources.getString(R.string.connectivity_issues)
+                    infoTextView.visible()
+                    infoTextView.text = getString(R.string.connectivity_issues)
                 } else if (recyclerSearch.isEmpty() && !isSomethingSearched) {
-                    infoTextView.isVisible = true
-                    infoTextView.text = resources.getString(R.string.search_suggestion)
+                    infoTextView.visible()
+                    infoTextView.text = getString(R.string.search_suggestion)
                 } else {
-                    infoTextView.isVisible = false
+                    infoTextView.gone()
                 }
             }
         }
@@ -100,6 +102,7 @@ class SearchFragment : Fragment(R.layout.fragment_search), GithubProjectAdapter.
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+                isSomethingSearched = false
                 return true
             }
         })
@@ -109,4 +112,12 @@ class SearchFragment : Fragment(R.layout.fragment_search), GithubProjectAdapter.
         super.onDestroyView()
         _binding = null
     }
+}
+
+fun View.visible() {
+    isVisible = true
+}
+
+fun View.gone() {
+    isGone = true
 }
