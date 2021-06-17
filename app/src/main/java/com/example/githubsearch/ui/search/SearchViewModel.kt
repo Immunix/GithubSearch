@@ -1,14 +1,15 @@
 package com.example.githubsearch.ui.search
 
-import androidx.hilt.Assisted
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import androidx.paging.cachedIn
 import com.example.githubsearch.data.GithubRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class SearchViewModel @ViewModelInject constructor(
+@HiltViewModel
+class SearchViewModel @Inject constructor(
     private val repository: GithubRepository,
-    @Assisted state: SavedStateHandle
+    state: SavedStateHandle
 ) : ViewModel() {
 
     private val currentQuery = state.getLiveData(CURRENT_QUERY, DEFAULT_QUERY)

@@ -7,6 +7,7 @@ import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isEmpty
 import androidx.core.view.isGone
+import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -65,6 +66,8 @@ class SearchFragment : Fragment(R.layout.fragment_search),
                 } else if (loadState.source.refresh is LoadState.Error && isSomethingSearched) {
                     infoTextView.visible()
                     infoTextView.text = getString(R.string.connectivity_issues)
+                } else if (loadState.source.refresh is LoadState.NotLoading && adapter.itemCount > 1) {
+                    infoTextView.gone()
                 } else if (recyclerSearch.isEmpty() && !isSomethingSearched) {
                     infoTextView.visible()
                     infoTextView.text = getString(R.string.search_suggestion)
